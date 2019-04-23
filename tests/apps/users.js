@@ -1,14 +1,14 @@
 const express = require('express');
-const TCP = require('../../src');
+const MicroUDP = require('../../src');
 
 const app = express();
-const tcp = new TCP({
+const udp = new MicroUDP({
   services: {
-    balances: process.env.BALANCES_TCP_ADDRESS,
+    balances: process.env.BALANCES_UDP_ADDRESS,
   },
 });
 
-app.use(tcp.middleware());
+app.use(udp.middleware());
 
 app.get('/', async (req, res) => {
   const user = {
@@ -17,7 +17,7 @@ app.get('/', async (req, res) => {
     hobbies: ['Node.js', 'Football'],
   };
 
-  const { balance } = await req.tcp.ask('balances.get', {
+  const { balance } = await req.udp.ask('balances.get', {
     userId: user.id,
   });
 
@@ -29,4 +29,4 @@ app.get('/', async (req, res) => {
 });
 
 app.listen(process.env.HTTP_PORT);
-tcp.listen(process.env.TCP_PORT);
+udp.listen(process.env.UDP_PORT);

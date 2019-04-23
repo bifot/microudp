@@ -1,11 +1,11 @@
-const TCP = require('../../src');
+const MicroUDP = require('../../src');
 
-const tcp = new TCP();
+const udp = new MicroUDP();
 
-tcp.on('get', (meta) => {
+udp.on('get', (meta) => {
   return {
     balance: meta.userId === 1 ? 1000 : 10,
   };
 });
 
-tcp.listen(process.env.TCP_PORT);
+udp.listen(process.env.UDP_PORT);

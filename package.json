@@ -1,25 +1,25 @@
 {
-  "name": "microtcp",
+  "name": "microudp",
   "version": "1.0.0",
-  "description": "Middleware for communicate between services via TCP.",
+  "description": "Middleware for communicate between services via UDP protocol.",
   "main": "src/index.js",
   "scripts": {
     "test": "NODE_ENV=test mocha ./tests/* --exit --timeout 10000"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bifot/microtcp.git"
+    "url": "git+https://github.com/bifot/microudp.git"
   },
   "keywords": [
-    "tcp",
+    "udp",
     "microservices"
   ],
   "author": "Mikhail Semin",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/bifot/microtcp/issues"
+    "url": "https://github.com/bifot/microudp/issues"
   },
-  "homepage": "https://github.com/bifot/microtcp#readme",
+  "homepage": "https://github.com/bifot/microudp#readme",
   "devDependencies": {
     "axios": "^0.18.0",
     "chai": "^4.2.0",

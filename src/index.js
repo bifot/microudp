@@ -2,7 +2,7 @@ const dgram = require('dgram');
 const nanoid = require('nanoid');
 const { deserializeMessage, serializeMessage } = require('./helpers');
 
-class TCP {
+class UDP {
   constructor(options = {}) {
     this.services = options.services || {};
 
@@ -44,13 +44,13 @@ class TCP {
   middleware() {
     return (...args) => {
       if (args.length === 3) {
-        args[0].tcp = this;
-        args[1].tcp = this;
+        args[0].udp = this;
+        args[1].udp = this;
 
         return args[2]();
       }
 
-      args[0].tcp = this;
+      args[0].udp = this;
 
       return args[1]();
     };
@@ -126,4 +126,4 @@ class TCP {
   }
 }
 
-module.exports = TCP;
+module.exports = UDP;
