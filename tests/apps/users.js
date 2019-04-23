@@ -6,6 +6,7 @@ const udp = new MicroUDP({
   services: {
     balances: process.env.BALANCES_UDP_ADDRESS,
   },
+  timeout: 1000,
 });
 
 app.use(udp.middleware());
@@ -17,12 +18,12 @@ app.get('/', async (req, res) => {
     hobbies: ['Node.js', 'Football'],
   };
 
-  const { balance } = await req.udp.ask('balances.get', {
+  const balance = await req.udp.ask('balances.get', {
     userId: user.id,
   });
 
   if (balance) {
-    user.balance = balance;
+    user.balance = balance.amount;
   }
 
   res.json(user);

@@ -5,10 +5,11 @@ const { deserializeMessage, serializeMessage } = require('./helpers');
 class UDP {
   constructor(options = {}) {
     this.services = options.services || {};
+    this.timeout = options.timeout || 5000;
 
     this.actions = new Map();
     this.sockets = new Map();
-    this.promises = new Map();
+    this.requests = new Map();
   }
 
   on(event, callback) {
@@ -36,7 +37,13 @@ class UDP {
       id,
     }));
 
-    this.promises.set(id, resolve);
+    this.requests.set(id, {
+      resolve,
+      timer: setTimeout(() => {
+        this.requests.delete(id);
+        resolve(null);
+      }, this.timeout),
+    });
 
     return promise;
   }
@@ -67,13 +74,18 @@ class UDP {
       }
 
       const { data, id } = json;
-      const resolve = this.promises.get(id);
+      const request = this.requests.get(id);
 
-      if (resolve) {
-        resolve(data);
+      if (!request) {
+        return;
       }
 
-      this.promises.delete(id);
+      const { resolve, timer } = request;
+
+      clearTimeout(timer);
+      resolve(data);
+
+      this.requests.delete(id);
     });
 
     Object.entries(this.services).forEach(([service, address]) => {

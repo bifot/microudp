@@ -4,7 +4,7 @@ const udp = new MicroUDP();
 
 udp.on('get', (meta) => {
   return {
-    balance: meta.userId === 1 ? 1000 : 10,
+    amount: meta.userId === 1 ? 1000 : 10,
   };
 });
 
