@@ -2,7 +2,7 @@ const dgram = require('dgram');
 const nanoid = require('nanoid');
 const { deserializeMessage, serializeMessage } = require('./helpers');
 
-class Index {
+class TCP {
   constructor(options = {}) {
     this.services = options.services || {};
 
@@ -39,6 +39,21 @@ class Index {
     this.promises.set(id, resolve);
 
     return promise;
+  }
+
+  middleware() {
+    return (...args) => {
+      if (args.length === 3) {
+        args[0].tcp = this;
+        args[1].tcp = this;
+
+        return args[2]();
+      }
+
+      args[0].tcp = this;
+
+      return args[1]();
+    };
   }
 
   async createSockets() {
@@ -111,4 +126,4 @@ class Index {
   }
 }
 
-module.exports = Index;
+module.exports = TCP;

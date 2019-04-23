@@ -8,6 +8,8 @@ const tcp = new TCP({
   },
 });
 
+app.use(tcp.middleware());
+
 app.get('/', async (req, res) => {
   const user = {
     id: 1,
@@ -15,7 +17,7 @@ app.get('/', async (req, res) => {
     hobbies: ['Node.js', 'Football'],
   };
 
-  const { balance } = await tcp.ask('balances.get', {
+  const { balance } = await req.tcp.ask('balances.get', {
     userId: user.id,
   });
 
