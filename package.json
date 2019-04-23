@@ -1,0 +1,33 @@
+{
+  "name": "microtcp",
+  "version": "1.0.0",
+  "description": "Middleware for communicate between services via TCP.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "NODE_ENV=test mocha ./tests/* --exit --timeout 10000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bifot/microtcp.git"
+  },
+  "keywords": [
+    "tcp",
+    "microservices"
+  ],
+  "author": "Mikhail Semin",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/bifot/microtcp/issues"
+  },
+  "homepage": "https://github.com/bifot/microtcp#readme",
+  "devDependencies": {
+    "axios": "^0.18.0",
+    "chai": "^4.2.0",
+    "chai-json-schema": "^1.5.0",
+    "express": "^4.16.4",
+    "mocha": "^6.1.4"
+  },
+  "dependencies": {
+    "nanoid": "^2.0.1"
+  }
+}
