@@ -48,6 +48,16 @@ class UDP {
     return promise;
   }
 
+  emit(event, data) {
+    const action = this.actions.get(event);
+
+    if (!action) {
+      return;
+    }
+
+    return action(data);
+  }
+
   middleware() {
     return (...args) => {
       if (args.length === 3) {
