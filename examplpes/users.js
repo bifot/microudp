@@ -1,5 +1,5 @@
 const express = require('express');
-const UDP = require('../../src');
+const UDP = require('../src');
 
 const app = express();
 const udp = new UDP({
