@@ -1,5 +1,5 @@
 {
-  "name": "microudp",
+  "name": "ms-udp",
   "version": "0.0.1",
   "description": "Middleware for communicate between services via UDP protocol.",
   "main": "src/index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bifot/microudp.git"
+    "url": "git+https://github.com/bifot/ms-udp.git"
   },
   "keywords": [
     "udp",
@@ -17,9 +17,9 @@
   "author": "Mikhail Semin",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/bifot/microudp/issues"
+    "url": "https://github.com/bifot/ms-udp/issues"
   },
-  "homepage": "https://github.com/bifot/microudp#readme",
+  "homepage": "https://github.com/bifot/ms-udp#readme",
   "devDependencies": {
     "axios": "^0.18.0",
     "chai": "^4.2.0",

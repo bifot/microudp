@@ -1,8 +1,8 @@
 const express = require('express');
-const MicroUDP = require('../../src');
+const UDP = require('../../src');
 
 const app = express();
-const udp = new MicroUDP({
+const udp = new UDP({
   services: {
     balances: process.env.BALANCES_UDP_ADDRESS,
   },

@@ -1,11 +1,11 @@
 const Koa = require('koa');
 const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
-const MicroUDP = require('../../src');
+const UDP = require('../../src');
 
 const app = new Koa();
 const router = new Router();
-const udp = new MicroUDP();
+const udp = new UDP();
 
 udp.on('get', (data) => {
   return {
