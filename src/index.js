@@ -1,5 +1,6 @@
 const dgram = require('dgram');
 const nanoid = require('nanoid');
+const debug = require('debug')('ms-udp');
 const { deserializeMessage, serializeMessage } = require('./helpers');
 
 class UDP {
@@ -30,6 +31,8 @@ class UDP {
 
     const id = nanoid();
     const promise = new Promise(r => (resolve = r));
+
+    debug('sending request');
 
     socket.send(serializeMessage({
       event: action,
@@ -86,6 +89,8 @@ class UDP {
       const { data, id } = json;
       const request = this.requests.get(id);
 
+      debug('received response');
+
       if (!request) {
         return;
       }
@@ -136,7 +141,11 @@ class UDP {
         return;
       }
 
+      debug('received request');
+
       const response = await action(data);
+
+      debug('sending response');
 
       socket.send(serializeMessage({
         data: response,

@@ -30,6 +30,7 @@
     "mocha": "^6.1.4"
   },
   "dependencies": {
+    "debug": "^4.1.1",
     "nanoid": "^2.0.1"
   }
 }
