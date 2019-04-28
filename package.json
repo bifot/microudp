@@ -1,10 +1,10 @@
 {
   "name": "ms-udp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Solution for communicate between microservices via UDP protocol.",
   "main": "src/index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha ./tests/* --exit --timeout 10000"
+    "test": "NODE_ENV=test USERS_PORT=8000 BALANCES_PORT=8001 BALANCES_UDP_ADDRESS=localhost:8001 mocha ./tests/* --exit --timeout 10000"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,8 @@
   "devDependencies": {
     "axios": "^0.18.0",
     "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "expect": "^24.7.1",
     "express": "^4.16.4",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",

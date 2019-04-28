@@ -8,9 +8,15 @@ Solution for communicate between microservices via UDP protocol. 🔬
 $ npm i ms-udp -S
 ```
 
+## Tests
+
+```sh
+$ npm test
+```
+
 ## Examples
 
-[There are some simple examples](examplpes).
+[There are some simple examples](examples).
 
 ## API
 
