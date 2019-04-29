@@ -4,7 +4,7 @@
   "description": "Solution for communicate between microservices via UDP protocol.",
   "main": "src/index.js",
   "scripts": {
-    "test": "NODE_ENV=test USERS_PORT=8000 BALANCES_PORT=8001 BALANCES_UDP_ADDRESS=localhost:8001 mocha ./tests/* --exit --timeout 10000"
+    "test": "NODE_ENV=test mocha ./tests/* --exit --timeout 10000"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "debug": "^4.1.1",
-    "nanoid": "^2.0.1"
+    "nanoid": "^2.0.1",
+    "roundround": "^0.2.0"
   }
 }

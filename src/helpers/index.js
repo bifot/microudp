@@ -27,3 +27,5 @@ module.exports.serializeMessage = (message) => {
 
   return Buffer.from(json || message);
 };
+
+module.exports.toArray = value => Array.isArray(value) ? value : [value];
