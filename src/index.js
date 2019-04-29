@@ -24,7 +24,7 @@ class UDP {
     const socket = this.sockets.get(service);
 
     if (!socket) {
-      return;
+      throw new Error(`Socket for ${service} service not found`);
     }
 
     let resolve;
