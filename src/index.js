@@ -1,7 +1,8 @@
 const dgram = require('dgram');
 const nanoid = require('nanoid');
+const roundround = require('roundround');
 const debug = require('debug')('ms-udp');
-const { deserializeMessage, serializeMessage } = require('./helpers');
+const { deserializeMessage, serializeMessage, toArray } = require('./helpers');
 
 class UDP {
   constructor(options = {}) {
@@ -103,11 +104,22 @@ class UDP {
       this.requests.delete(id);
     });
 
-    Object.entries(this.services).forEach(([service, address]) => {
-      const [host, port] = address.split(':');
+    Object.entries(this.services).forEach(([service, addresses]) => {
+      const next = roundround(
+        toArray(addresses).map((address) => {
+          const [host, port] = address.split(':');
+
+          return {
+            host,
+            port,
+          };
+        }),
+      );
 
       this.sockets.set(service, {
         send: (message) => {
+          const { host, port } = next();
+
           socket.send(message, port, host);
         },
       });

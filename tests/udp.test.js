@@ -11,12 +11,22 @@ describe('udp', () => {
   let app;
 
   before(async () => {
+    users.udp.services = {
+      balances: [
+        'localhost:5000',
+        'localhost:5001',
+        'localhost:5002',
+      ],
+    };
+
     await Promise.all([
       users.udp.createSockets(),
-      balances.udp.listen(process.env.BALANCES_PORT),
+      balances.udp.listen(5000),
+      balances.udp.listen(5001),
+      balances.udp.listen(5002),
     ]);
 
-    app = users.app.listen(process.env.USERS_PORT);
+    app = users.app.listen(5010);
   });
 
   it('should get response', async () => {
