@@ -20,7 +20,7 @@ class UDP {
     return this;
   }
 
-  ask(event, data) {
+  async ask(event, data) {
     const [service, action] = event.split('.');
     const socket = this.sockets.get(service);
 
@@ -33,13 +33,13 @@ class UDP {
     const id = nanoid();
     const promise = new Promise(r => (resolve = r));
 
-    debug('sending request');
-
-    socket.send(serializeMessage({
+    await socket.send(serializeMessage({
       event: action,
       data,
       id,
     }));
+
+    debug('sent request');
 
     this.requests.set(id, {
       resolve,
@@ -63,7 +63,11 @@ class UDP {
   }
 
   middleware() {
-    return (...args) => {
+    return async (...args) => {
+      if (!this.socketsCreated) {
+        await this.createSockets();
+      }
+
       if (args.length === 3) {
         args[0].udp = this;
         args[1].udp = this;
@@ -78,6 +82,8 @@ class UDP {
   }
 
   async createSockets() {
+    debug('creating sockets');
+
     const socket = dgram.createSocket('udp4');
 
     socket.on('message', (message) => {
@@ -117,13 +123,21 @@ class UDP {
       );
 
       this.sockets.set(service, {
-        send: (message) => {
+        send: (message) => new Promise((resolve, reject) => {
           const { host, port } = next();
 
-          socket.send(message, port, host);
-        },
+          socket.send(message, port, host, (err, reply) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(reply);
+            }
+          });
+        }),
       });
     });
+
+    debug('sockets created');
 
     this.socketsCreated = true;
   }
@@ -140,6 +154,8 @@ class UDP {
     });
 
     socket.on('message', async (message, info) => {
+      debug('received request');
+
       const json = deserializeMessage(message);
 
       if (!json) {
@@ -153,16 +169,14 @@ class UDP {
         return;
       }
 
-      debug('received request');
-
       const response = await action(data);
 
-      debug('sending response');
-
-      socket.send(serializeMessage({
+      await socket.send(serializeMessage({
         data: response,
         id,
       }), info.port, info.address);
+
+      debug('sent response');
     });
 
     socket.bind(port, address);
