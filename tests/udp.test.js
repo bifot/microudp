@@ -20,7 +20,6 @@ describe('udp', () => {
     };
 
     await Promise.all([
-      users.udp.createSockets(),
       balances.udp.listen(5000),
       balances.udp.listen(5001),
       balances.udp.listen(5002),

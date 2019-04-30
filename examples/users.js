@@ -31,7 +31,6 @@ app.get('/', async (req, res) => {
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(process.env.HTTP_PORT);
-  udp.listen(process.env.UDP_PORT);
 }
 
 module.exports = {

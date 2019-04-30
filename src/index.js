@@ -63,7 +63,11 @@ class UDP {
   }
 
   middleware() {
-    return (...args) => {
+    return async (...args) => {
+      if (!this.socketsCreated) {
+        await this.createSockets();
+      }
+
       if (args.length === 3) {
         args[0].udp = this;
         args[1].udp = this;
@@ -78,6 +82,8 @@ class UDP {
   }
 
   async createSockets() {
+    debug('creating sockets');
+
     const socket = dgram.createSocket('udp4');
 
     socket.on('message', (message) => {
@@ -130,6 +136,8 @@ class UDP {
         }),
       });
     });
+
+    debug('sockets created');
 
     this.socketsCreated = true;
   }
