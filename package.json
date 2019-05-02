@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "debug": "^4.1.1",
-    "nanoid": "^2.0.1",
     "roundround": "^0.2.0"
   },
   "directories": {

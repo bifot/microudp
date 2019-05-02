@@ -1,8 +1,7 @@
 const dgram = require('dgram');
-const nanoid = require('nanoid');
 const roundround = require('roundround');
 const debug = require('debug')('ms-udp');
-const { deserializeMessage, serializeMessage, toArray } = require('./helpers');
+const { deserializeMessage, serializeMessage, toArray, createID } = require('./helpers');
 
 class UDP {
   constructor(options = {}) {
@@ -30,7 +29,7 @@ class UDP {
 
     let resolve;
 
-    const id = nanoid();
+    const id = createID();
     const promise = new Promise(r => (resolve = r));
 
     await socket.send(serializeMessage({
