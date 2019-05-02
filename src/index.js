@@ -87,6 +87,8 @@ class UDP {
     const socket = dgram.createSocket('udp4');
 
     socket.on('message', (message) => {
+      debug('received response');
+
       const json = deserializeMessage(message);
 
       if (!json) {
@@ -95,8 +97,6 @@ class UDP {
 
       const { data, id } = json;
       const request = this.requests.get(id);
-
-      debug('received response');
 
       if (!request) {
         return;
