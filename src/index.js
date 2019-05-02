@@ -19,38 +19,6 @@ class UDP {
     return this;
   }
 
-  async ask(event, data) {
-    const [service, action] = event.split('.');
-    const socket = this.sockets.get(service);
-
-    if (!socket) {
-      throw new Error(`Socket for ${service} service not found`);
-    }
-
-    let resolve;
-
-    const id = createID();
-    const promise = new Promise(r => (resolve = r));
-
-    await socket.send(serializeMessage({
-      event: action,
-      data,
-      id,
-    }));
-
-    debug('sent request');
-
-    this.requests.set(id, {
-      resolve,
-      timer: setTimeout(() => {
-        this.requests.delete(id);
-        resolve(null);
-      }, this.timeout),
-    });
-
-    return promise;
-  }
-
   emit(event, data) {
     const action = this.actions.get(event);
 
@@ -78,6 +46,28 @@ class UDP {
 
       return args[1]();
     };
+  }
+
+  async ask(event, data, options = { attempts: 5 }) {
+    const [service, action] = event.split('.');
+    const socket = this.sockets.get(service);
+
+    if (!socket) {
+      throw new Error(`Socket for ${service} service not found`);
+    }
+
+    const send = async (attempt = 0) => {
+      if (attempt === options.attempts) {
+        return null;
+      }
+
+      debug(`sending request in ${attempt + 1} time`);
+
+      return socket.send(action, data)
+        .catch(() => send(attempt + 1));
+    };
+
+    return send();
   }
 
   async createSockets() {
@@ -122,17 +112,34 @@ class UDP {
       );
 
       this.sockets.set(service, {
-        send: (message) => new Promise((resolve, reject) => {
-          const { host, port } = next();
+        send: (action, data) => {
+          let resolve;
+          let reject;
 
-          socket.send(message, port, host, (err, reply) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(reply);
-            }
+          const { host, port } = next();
+          const id = createID();
+
+          const promise = new Promise((res, rej) => {
+            resolve = res;
+            reject = rej;
           });
-        }),
+
+          this.requests.set(id, {
+            resolve,
+            timer: setTimeout(() => {
+              reject();
+              this.requests.delete(id);
+            }, this.timeout),
+          });
+
+          socket.send(serializeMessage({
+            event: action,
+            data,
+            id,
+          }), port, host);
+
+          return promise;
+        },
       });
     });
 
