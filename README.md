@@ -1,6 +1,6 @@
 # ms-udp
 
-Solution for communicate between microservices via UDP protocol. 🔬
+Solution for communication between services using UDP protocol. 🔬 🔬
 
 ## Install
 
