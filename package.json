@@ -1,7 +1,7 @@
 {
   "name": "ms-udp",
   "version": "0.2.1",
-  "description": "Solution for communication between services using UDP protocol. 🔬",
+  "description": "Solution for communication between services using UDP protocol with build-in auto-retry & round-robin balancing. 🔬",
   "main": "src/index.js",
   "scripts": {
     "test": "NODE_ENV=test mocha ./tests/* --exit --timeout 10000"

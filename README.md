@@ -1,6 +1,6 @@
 # ms-udp
 
-Solution for communication between services using UDP protocol. 🔬 🔬
+Solution for communication between services using UDP protocol with build-in auto-retry & round-robin balancing. 🔬
 
 ## Install
 
@@ -25,8 +25,8 @@ $ npm test
 #### .constuctor(options)
 
 * `options` <?[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>
-  * `services` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> Available services to send request
-  * `timeout` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> Timeout for outgoing request in ms 
+  * `services` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) / [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)> Available services to send request
+  * `timeout` <[?number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> Timeout for outgoing request in ms *(default: 5000)*
 
 This method creates instance of UDP class.
 
@@ -63,6 +63,8 @@ udp.on('check_user_level', async (data) => {
 
 * `event` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> Event name in format `<service_name>.<action>`
 * `data` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> Event data
+* `options` <[?Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> Request options
+  * `attempts` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> Maximum number of attempts *(default: 5)*
 
 This method asks other microservice for something.
 
