@@ -1,8 +1,7 @@
 const dgram = require('dgram');
-const nanoid = require('nanoid');
 const roundround = require('roundround');
 const debug = require('debug')('ms-udp');
-const { deserializeMessage, serializeMessage, toArray } = require('./helpers');
+const { deserializeMessage, serializeMessage, toArray, createID } = require('./helpers');
 
 class UDP {
   constructor(options = {}) {
@@ -18,38 +17,6 @@ class UDP {
     this.actions.set(event, callback);
 
     return this;
-  }
-
-  async ask(event, data) {
-    const [service, action] = event.split('.');
-    const socket = this.sockets.get(service);
-
-    if (!socket) {
-      throw new Error(`Socket for ${service} service not found`);
-    }
-
-    let resolve;
-
-    const id = nanoid();
-    const promise = new Promise(r => (resolve = r));
-
-    await socket.send(serializeMessage({
-      event: action,
-      data,
-      id,
-    }));
-
-    debug('sent request');
-
-    this.requests.set(id, {
-      resolve,
-      timer: setTimeout(() => {
-        this.requests.delete(id);
-        resolve(null);
-      }, this.timeout),
-    });
-
-    return promise;
   }
 
   emit(event, data) {
@@ -81,12 +48,36 @@ class UDP {
     };
   }
 
+  async ask(event, data, options = { attempts: 5 }) {
+    const [service, action] = event.split('.');
+    const socket = this.sockets.get(service);
+
+    if (!socket) {
+      throw new Error(`Socket for ${service} service not found`);
+    }
+
+    const send = async (attempt = 0) => {
+      if (attempt === options.attempts) {
+        return null;
+      }
+
+      debug(`sending request in ${attempt + 1} time`);
+
+      return socket.send(action, data)
+        .catch(() => send(attempt + 1));
+    };
+
+    return send();
+  }
+
   async createSockets() {
     debug('creating sockets');
 
     const socket = dgram.createSocket('udp4');
 
     socket.on('message', (message) => {
+      debug('received response');
+
       const json = deserializeMessage(message);
 
       if (!json) {
@@ -95,8 +86,6 @@ class UDP {
 
       const { data, id } = json;
       const request = this.requests.get(id);
-
-      debug('received response');
 
       if (!request) {
         return;
@@ -123,17 +112,34 @@ class UDP {
       );
 
       this.sockets.set(service, {
-        send: (message) => new Promise((resolve, reject) => {
-          const { host, port } = next();
+        send: (action, data) => {
+          let resolve;
+          let reject;
 
-          socket.send(message, port, host, (err, reply) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(reply);
-            }
+          const { host, port } = next();
+          const id = createID();
+
+          const promise = new Promise((res, rej) => {
+            resolve = res;
+            reject = rej;
           });
-        }),
+
+          this.requests.set(id, {
+            resolve,
+            timer: setTimeout(() => {
+              reject();
+              this.requests.delete(id);
+            }, this.timeout),
+          });
+
+          socket.send(serializeMessage({
+            event: action,
+            data,
+            id,
+          }), port, host);
+
+          return promise;
+        },
       });
     });
 
@@ -180,6 +186,8 @@ class UDP {
     });
 
     socket.bind(port, address);
+
+    return socket;
   }
 }
 
