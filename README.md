@@ -1,6 +1,6 @@
 # ms-udp
 
-Solution for communication between services using UDP protocol with build-in auto-retry & round-robin balancing. 🔬
+Solution for communication between services using UDP protocol with built-in auto-retry & round-robin balancing. 🔬
 
 ## Install
 
