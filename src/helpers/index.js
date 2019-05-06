@@ -1,11 +1,31 @@
-const deserializeMessage = require('./deserializeMessage');
-const serializeMessage = require('./serializeMessage');
-const toArray = require('./toArray');
-const createID = require('./createID');
+module.exports.deserializeMessage = (message) => {
+  const content = message.toString();
 
-module.exports = {
-  deserializeMessage,
-  serializeMessage,
-  toArray,
-  createID,
+  if (!content) {
+    return;
+  }
+
+  let json;
+
+  try {
+    json = JSON.parse(content);
+  } catch (err) {
+    console.error('Cannot parse received message', content, err);
+  }
+
+  return json;
 };
+
+module.exports.serializeMessage = (message) => {
+  let json;
+
+  try {
+    json = JSON.stringify(message);
+  } catch (err) {
+    console.error('Cannot stringify message', message, err);
+  }
+
+  return Buffer.from(json || message);
+};
+
+module.exports.toArray = value => Array.isArray(value) ? value : [value];

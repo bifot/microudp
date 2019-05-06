@@ -1,7 +1,7 @@
 {
   "name": "ms-udp",
-  "version": "0.3.0",
-  "description": "Solution for communication between services using UDP protocol with build-in auto-retry & round-robin balancing. 🔬",
+  "version": "0.2.1",
+  "description": "Solution for communicate between microservices via UDP protocol.",
   "main": "src/index.js",
   "scripts": {
     "test": "NODE_ENV=test mocha ./tests/* --exit --timeout 10000"
@@ -33,10 +33,7 @@
   },
   "dependencies": {
     "debug": "^4.1.1",
+    "nanoid": "^2.0.1",
     "roundround": "^0.2.0"
-  },
-  "directories": {
-    "example": "examples",
-    "test": "tests"
   }
 }
