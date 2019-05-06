@@ -186,6 +186,8 @@ class UDP {
     });
 
     socket.bind(port, address);
+
+    return socket;
   }
 }
 
