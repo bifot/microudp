@@ -138,7 +138,7 @@ class UDP {
             id,
           }), port, host, (err) => {
             if (err) {
-              reject(err);
+              console.error('Could not send message', err);
             }
           });
 
@@ -184,7 +184,11 @@ class UDP {
       await socket.send(serializeMessage({
         data: response,
         id,
-      }), info.port, info.address);
+      }), info.port, info.address, (err) => {
+        if (err) {
+          console.error('Could not send message', err);
+        }
+      });
 
       debug('sent response');
     });
