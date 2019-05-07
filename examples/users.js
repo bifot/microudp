@@ -4,7 +4,7 @@ const UDP = require('../src');
 const app = express();
 const udp = new UDP({
   services: {
-    balances: 'users:5000',
+    balances: process.env.BALANCES_UDP_ADDRESS,
   },
   timeout: 1000,
 });
@@ -30,7 +30,7 @@ app.get('/', async (req, res) => {
 });
 
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(4999);
+  app.listen(process.env.HTTP_PORT);
 }
 
 module.exports = {

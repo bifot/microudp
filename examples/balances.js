@@ -26,7 +26,8 @@ app.use(bodyParser());
 app.use(router.routes());
 
 if (process.env.NODE_ENV !== 'test') {
-  udp.listen(5000);
+  app.listen(process.env.HTTP_PORT);
+  udp.listen(process.env.UDP_PORT);
 }
 
 module.exports = {
