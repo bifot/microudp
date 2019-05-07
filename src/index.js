@@ -136,7 +136,11 @@ class UDP {
             event: action,
             data,
             id,
-          }), port, host);
+          }), port, host, (err) => {
+            if (err) {
+              reject(err);
+            }
+          });
 
           return promise;
         },
