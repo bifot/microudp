@@ -152,7 +152,7 @@ class UDP {
     this.socketsCreated = true;
   }
 
-  async listen(port, address) {
+  async listen(port, host) {
     if (!this.socketsCreated) {
       await this.createSockets();
     }
@@ -193,7 +193,7 @@ class UDP {
       debug('sent response');
     });
 
-    socket.bind(port, address);
+    socket.bind(port, host);
 
     return socket;
   }

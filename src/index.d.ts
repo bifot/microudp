@@ -8,16 +8,16 @@ declare class UDP {
   public socketsCreated: boolean;
 
   public constructor(options?: {
-    services?: {},
+    services?: object,
     timeout?: number
   });
 
   public on(event: string, callback: callback): this;
-  public emit(event: string, data: object): this;
+  public emit(event: string, data: any): this;
   public middleware(): (...args) => void;
-  public ask(event: string, data: object, options?: { attempts?: number }): Promise<void>
+  public ask(event: string, data: any, options?: { attempts?: number }): Promise<any>
   public createSockets(): Promise<void>;
-  public listen(port: number, address?: string): Promise<Socket>;
+  public listen(port: number, host?: string): Promise<Socket>;
 }
 
 export = UDP;
