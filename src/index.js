@@ -61,7 +61,7 @@ class UDP {
         return null;
       }
 
-      debug(`sending request in ${attempt + 1} time`);
+      debug(`requesting ${event} in ${attempt + 1} time`);
 
       return socket.send(action, data)
         .catch(() => send(attempt + 1));
@@ -119,6 +119,8 @@ class UDP {
           const { host, port } = next();
           const id = createID();
 
+          debug(`sending request to ${host}:${port}`);
+
           const promise = new Promise((res, rej) => {
             resolve = res;
             reject = rej;
@@ -152,7 +154,7 @@ class UDP {
     this.socketsCreated = true;
   }
 
-  async listen(port, address) {
+  async listen(port, host) {
     if (!this.socketsCreated) {
       await this.createSockets();
     }
@@ -193,7 +195,7 @@ class UDP {
       debug('sent response');
     });
 
-    socket.bind(port, address);
+    socket.bind(port, host);
 
     return socket;
   }
