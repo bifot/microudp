@@ -140,7 +140,7 @@ app.get('/', async (req, res) => {
 
 This method creates sockets for available services.
 
-#### .listen(port, host)
+#### .listen(port[, host])
 
 * `port` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)>
 * `host` <[?string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)>
