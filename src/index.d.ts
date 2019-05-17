@@ -13,10 +13,10 @@ declare class UDP {
   });
 
   public on(event: string, callback: callback): this;
-  public emit(event: string, data: any): this;
+  public emit(event: string, data?: any): this;
   public middleware(): (...args) => void;
-  public ask(event: string, data: any, options?: { attempts?: number }): Promise<any>
-  public createSockets(): Promise<void>;
+  public ask(event: string, data?: any, options?: { attempts?: number }): Promise<any>
+  public createSockets(): this;
   public listen(port: number, host?: string): Promise<Socket>;
 }
 
