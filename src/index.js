@@ -32,7 +32,7 @@ class UDP {
   middleware() {
     return async (...args) => {
       if (!this.socketsCreated) {
-        await this.createSockets();
+        this.createSockets();
       }
 
       if (args.length === 3) {
@@ -49,6 +49,10 @@ class UDP {
   }
 
   async ask(event, data, options = { attempts: 5 }) {
+    if (!this.socketsCreated) {
+      this.createSockets();
+    }
+
     const [service, action] = event.split('.');
     const socket = this.sockets.get(service);
 
@@ -70,7 +74,7 @@ class UDP {
     return send();
   }
 
-  async createSockets() {
+  createSockets() {
     debug('creating sockets');
 
     const socket = dgram.createSocket('udp4');
@@ -152,11 +156,13 @@ class UDP {
     debug('sockets created');
 
     this.socketsCreated = true;
+
+    return this;
   }
 
   async listen(port, host) {
     if (!this.socketsCreated) {
-      await this.createSockets();
+      this.createSockets();
     }
 
     const socket = dgram.createSocket('udp4');
