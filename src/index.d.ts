@@ -1,5 +1,5 @@
 type legacyCallback = (data: object) => any;
-type advancedCallback = (udp: UDP, data: object) => any;
+type newCallback = (udp: UDP, data: object) => any;
 
 declare class Socket {}
 
@@ -13,7 +13,7 @@ declare class UDP {
     timeout?: number
   });
 
-  public on(event: string, callback: legacyCallback | advancedCallback): this;
+  public on(event: string, callback: legacyCallback | newCallback): this;
   public emit(event: string, data?: any): this;
   public middleware(): (...args) => void;
   public ask(event: string, data?: any, options?: { attempts?: number }): Promise<any>
