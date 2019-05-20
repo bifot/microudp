@@ -59,6 +59,15 @@ udp.on('check_user_level', async (data) => {
   
   return level;
 });
+
+udp.on('delete', async ({ ask }, { id: userId }) => {
+  await Promise.all([
+    ask('balances.clear', { userId }),
+    Users.remove({ userId }),
+  ]);
+
+  return 'ok';
+});
 ```
 
 #### .emit(event[, data])
