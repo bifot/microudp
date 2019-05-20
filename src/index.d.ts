@@ -18,7 +18,7 @@ declare class UDP {
   public middleware(): (...args) => void;
   public ask(event: string, data?: any, options?: { attempts?: number }): Promise<any>
   public createSockets(): this;
-  public listen(port: number, host?: string): Promise<Socket>;
+  public listen(port: number, host?: string): Socket;
 }
 
 export = UDP;

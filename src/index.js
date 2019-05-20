@@ -160,7 +160,7 @@ class UDP {
     return this;
   }
 
-  async listen(port, host) {
+  listen(port, host) {
     if (!this.socketsCreated) {
       this.createSockets();
     }
@@ -168,7 +168,7 @@ class UDP {
     const socket = dgram.createSocket('udp4');
 
     socket.on('error', (err) => {
-      console.log(err.stack);
+      console.error(err.stack);
     });
 
     socket.on('message', async (message, info) => {
