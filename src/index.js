@@ -26,11 +26,17 @@ class UDP {
       return;
     }
 
-    return action(data);
+    const app = {
+      ask: this.ask.bind(this),
+    };
+
+    return action.length === 2
+      ? action(app, data)
+      : action(data);
   }
 
   middleware() {
-    return async (...args) => {
+    return (...args) => {
       if (!this.socketsCreated) {
         this.createSockets();
       }
@@ -187,9 +193,13 @@ class UDP {
         return;
       }
 
+      const app = {
+        ask: this.ask.bind(this),
+      };
+
       const response = await (
         action.length === 2
-          ? action(this, data)
+          ? action(app, data)
           : action(data)
       );
 
