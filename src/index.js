@@ -187,7 +187,11 @@ class UDP {
         return;
       }
 
-      const response = await action(data);
+      const response = await (
+        action.length === 2
+          ? action(this, data)
+          : action(data)
+      );
 
       await socket.send(serializeMessage({
         data: response,
