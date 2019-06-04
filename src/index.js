@@ -54,7 +54,7 @@ class UDP {
     };
   }
 
-  async ask(event, data, options = { attempts: 5 }) {
+  async ask(event, data, options = { attempts: 5, timeout: this.timeout }) {
     if (!this.socketsCreated) {
       this.createSockets();
     }
@@ -73,7 +73,7 @@ class UDP {
 
       debug(`requesting ${event} in ${attempt + 1} time`);
 
-      return socket.send(action, data)
+      return socket.send(action, data, options)
         .catch(() => send(attempt + 1));
     };
 
@@ -122,7 +122,7 @@ class UDP {
       );
 
       this.sockets.set(service, {
-        send: (action, data) => {
+        send: (action, data, { timeout }) => {
           let resolve;
           let reject;
 
@@ -141,7 +141,7 @@ class UDP {
             timer: setTimeout(() => {
               reject();
               this.requests.delete(id);
-            }, this.timeout),
+            }, timeout),
           });
 
           socket.send(serializeMessage({

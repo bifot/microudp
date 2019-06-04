@@ -16,7 +16,7 @@ declare class UDP {
   public on(event: string, callback: legacyCallback | newCallback): this;
   public emit(event: string, data?: any): this;
   public middleware(): (...args) => void;
-  public ask(event: string, data?: any, options?: { attempts?: number }): Promise<any>
+  public ask(event: string, data?: any, options?: { attempts?: number, timeout?: number }): Promise<any>
   public createSockets(): this;
   public listen(port: number, host?: string): Socket;
 }
