@@ -1,6 +1,6 @@
 {
   "name": "ms-udp",
-  "version": "0.3.6",
+  "version": "1.0.0",
   "description": "Solution for communication between services using UDP protocol with built-in auto-retry & round-robin balancing. 🔬",
   "main": "src/index.js",
   "types": "src/index.d.ts",
