@@ -1,15 +1,14 @@
 const express = require('express');
-const UDP = require('../src');
+const { Client } = require('../src');
 
 const app = express();
-const udp = new UDP({
+const client = new Client({
   services: {
-    balances: process.env.BALANCES_UDP_ADDRESS,
+    balances: process.env.BALANCES_ADDRESS,
   },
-  timeout: 1000,
 });
 
-app.use(udp.middleware());
+app.use(client.middleware());
 
 app.get('/', async (req, res) => {
   const user = {
@@ -22,18 +21,14 @@ app.get('/', async (req, res) => {
     userId: user.id,
   });
 
-  if (balance) {
-    user.balance = balance.amount;
-  }
-
-  res.json(user);
+  res.json({
+    ...user,
+    balance,
+  });
 });
 
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(process.env.HTTP_PORT);
+  app.listen(process.env.APP_PORT);
 }
 
-module.exports = {
-  app,
-  udp,
-};
+module.exports = app;
