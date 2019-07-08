@@ -14,6 +14,11 @@ class Client {
   ask(event, data, options = { attempts: 5, timeout: 5000 }) {
     const [service, action] = event.split('.');
     const socket = this.sockets.get(service);
+    const mock = this.responses && this.responses[service] && this.responses[service][action];
+
+    if (mock) {
+      return typeof mock === 'function' ? mock(data) : mock;
+    }
 
     if (!socket) {
       throw new Error(`Socket for ${service} service not found`);
@@ -29,6 +34,12 @@ class Client {
     };
 
     return emit();
+  }
+
+  mock(responses) {
+    this.responses = responses;
+
+    return this;
   }
 
   middleware() {
