@@ -24,7 +24,7 @@ class Client {
       throw new Error(`Socket for ${service} service not found`);
     }
 
-    const emit = (index = 1) => {
+    const emit = (index = 0) => {
       if (index === options.attempts) {
         return;
       }
